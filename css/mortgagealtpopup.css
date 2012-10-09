@@ -104,6 +104,11 @@ div.m-popup div.m-select div.m-row h3
     color: #0485B7;
 }
 
+div.m-popup div.m-select div.m-row.first
+{
+    border-top: 2px solid #87ceeb;
+}
+
 div.m-popup div.m-select div.m-row .sub
 {
     font-size: 14px;
@@ -145,6 +150,7 @@ div.m-popup div.m-select div.m-row
 div.m-popup div.m-select div.m-row:hover
 {
     background-color: #87ceeb;
+    cursor: pointer;
 }
 
 div.f-clear

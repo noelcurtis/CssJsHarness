@@ -63,19 +63,19 @@
 
                     <div class="control-group">
                         <label>Name</label>
-                        <input type="text"><br/>
-                        <span class="input-error" style="display: none;">Please enter a name.</span>
+                        <input id="f-name" type="text"><br/>
+                        <span class="help-block" style="display: none;">Please enter a name.</span>
                     </div>
 
                     <div style="width: 20px;"></div>
 
                     <div class="control-group">
                         <label>Email</label>
-                        <input type="text"><br/>
-                        <span class="input-error" style="display: none;">Please enter a valid email.</span>
+                        <input id="f-email" type="text"><br/>
+                        <span class="help-block" style="display: none;">Please enter a valid email.</span>
                     </div>
 
-                    <a class="back">Send</a>
+                    <a class="back" onclick="submitMForm(); return false;">Send</a>
 
                 </div>
 
@@ -85,7 +85,9 @@
 
                 <div class="m-wrapper">
 
-                    <div class="m-row">
+                    <div style="height: 10px;"></div>
+
+                    <div class="m-row first">
                         <h3 class="l-name">American Federal</h3>
                         <span class="m-rate sub"><b class="value">3.625%</b> Rate</span>
                         <span class="m-apr sub"><b class="value">3.813%</b> APR</span>
@@ -144,6 +146,63 @@
     </div>
 
 </div>
+
+<script>
+
+    $(function (){
+        $(".m-select .m-row").on("click", mDetailsSelect);
+    });
+
+    // Use to select a mortgage
+    function mDetailsSelect(e)
+    {
+        $(".m-select .m-row").removeClass("selected");
+        $(e.delegateTarget).addClass("selected");
+    }
+
+    // Use to submit the form
+    function submitMForm()
+    {
+        if(validateMForm())
+        {
+            $(".m-form").slideUp();
+            $(".m-form-success").slideDown();
+        }
+    }
+
+    // Use to validate the form
+    function validateMForm()
+    {
+        var mValid = true;
+
+        $(".control-group").removeClass("error");
+        $(".help-block").hide();
+
+        var name = $(".m-form #f-name");
+        if(name.val() == "")
+        {
+            mValid = false;
+            console.log("error");
+            name.closest(".control-group").addClass("error");
+            name.closest(".control-group").find("span").show();
+            name.focus();
+            return mValid;
+        }
+
+        var email = $(".m-form #f-email");
+        if(email.val() == "")
+        {
+            mValid = false;
+            email.closest(".control-group").addClass("error");
+            email.closest(".control-group").find("span").show();
+            email   .focus();
+            return mValid;
+        }
+
+        return mValid;
+    }
+
+</script>
 
 </body>
 </html>
