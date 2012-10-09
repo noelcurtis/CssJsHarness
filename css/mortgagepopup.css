@@ -1,0 +1,73 @@
+div.wrapper
+{
+    width: 820px;
+    box-shadow: 2px 2px 5px 6px #ccc;
+}
+
+div.mortgage-popup div.header
+{
+    border-bottom: 1px solid black;
+}
+
+div.mortgage-popup div.content
+{
+    padding-left: 20px;
+}
+
+div.mortgage-popup div.content div.m-browse
+{
+    float: left;
+}
+
+div.mortgage-popup div.content div.m-wrapper
+{
+    width: 388px;
+    overflow: hidden;
+    max-height: 400px;
+}
+
+div.mortgage-popup div.content div.m-wrapper div.mortgage-select
+{
+    width: 428px;
+    border: none;
+    overflow: scroll;
+    overflow-x: hidden;
+    max-height: 400px;
+}
+
+div.mortgage-popup div.content div.m-wrapper div.mortgage-select .m-row
+{
+    height: 70px;
+}
+
+div.mortgage-popup div.content div.m-wrapper div.mortgage-select .m-row .m-info
+{
+    border-bottom: 2px solid #87ceeb;
+    display: table-cell;
+    height: 70px;
+    min-width: 368px;
+}
+
+div.mortgage-popup div.content div.m-wrapper div.mortgage-select .m-row .m-info:hover
+{
+    background-color: #87ceeb;
+}
+
+div.mortgage-popup div.content div.m-wrapper div.mortgage-select .m-row .m-triangle
+{
+    display: table-cell;
+    width: 20px;
+}
+
+div.mortgage-popup div.content div.mortgage-details
+{
+    max-width: 387px;
+    max-height: 440px;
+    overflow-y: scroll;
+    float: left;
+}
+
+.clearer
+{
+    clear: both;
+}
