@@ -98,7 +98,7 @@ div.m-popup div.m-select
 {
     float: left;
     width: 413px;
-    overflow-y: scroll;
+    overflow-y: auto;
     height: 415px;
 }
 
@@ -110,9 +110,9 @@ div.m-popup div.m-select div.m-row h3
     color: #0485B7;
 }
 
-div.m-popup div.m-select div.m-row.first
+div.m-popup div.m-select div.m-row.last
 {
-    border-top: 2px solid #87ceeb;
+    border-bottom: none;
 }
 
 div.m-popup div.m-select div.m-row .sub
@@ -164,7 +164,7 @@ div.f-clear
     clear: both;
 }
 
-div.seperator
+div.m-popup div.seperator
 {
     margin: 0px auto;
     margin-top: 20px;
