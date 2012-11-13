@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <link rel="stylesheet" href="css/mortgagealtpopup.css" type="text/css" media="all">
+    <script src="framework/jquery-1.8.2.min.js" type="text/javascript"></script>
+    <script src="framework/Highstock-1.2.4/js/highstock.src.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="framework/bootstrap/css/bootstrap.css" type="text/css" media="all">
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Oswald">
+</head>
+<body>
+
+    <div id='mx-chart' style='width: 650px; height: 380px;'></div>
+
+
+    <script>
+
+        $(
+                function()
+                {
+                    mxCreateChart();
+                    mxAddFlags(1);
+                }
+        );
+
+        var mxChart = new Object();
+        var drawnObjects = [];
+        var markerLine = new Object();
+
+        function mxCreateChart()
+        {
+            var mxYears = new Array();
+            var pointsA = new Array();
+            var pointsB = new Array();
+
+            for (i = 0; i < 31; i++)
+            {
+                mxYears.push(i);
+                pointsA.push(0);
+                pointsB.push(0);
+            }
+
+            mxChart = new Highcharts.StockChart({
+                chart: {
+                    plotBackgroundColor: "#E2EEDA",
+                    renderTo: 'mx-chart',
+                    type: 'spline',
+                    animation: false,
+                    marginLeft: 80,
+                    marginRight: 10,
+                    marginBottom: 40,
+                },
+                colors: [
+                    "#CB7C21",
+                    "#6CAA44"
+                ],
+                symbols: [
+                    'circle',
+                    'circle'
+                ],
+                rangeSelector: {
+                    enabled: false,
+                },
+                navigator: {
+                    enabled: false,
+                },
+                scrollbar: {
+                    enabled: false,
+                },
+                plotOptions: {
+                    spline: {
+                        shadow: false,
+                        stickyTracking: true,
+                        allowPointSelect: true,
+                        marker: {
+                            enabled: false,
+                        },
+                    }
+                },
+                legend:
+                {
+                    enabled: false,
+                },
+                credits:
+                {
+                    enabled: false,
+                },
+                title: {
+                    text: ''
+                },
+                xAxis: {
+                    showLastLabel: true,
+                    endOnTick: false,
+                    categories: mxYears,
+                    gridLineColor: "#C4D3DC",
+                    gridLineWidth: 0,
+                    minorGridLineColor: '#C4D3DC',
+                    minorGridLineWidth: 1,
+                    minorTickInterval: 1,
+                    labels:
+                    {
+                        formatter: function()
+                        {
+                            return this.value;
+                        },
+                        y: 15,
+                    },
+                    title:
+                    {
+                        text: 'Years after home purchase',
+                        align: "low",
+                        rotation: 0,
+                        style:
+                        {
+                            color: '#888888',
+                            fontSize: '11px',
+                        }
+                    }
+                },
+                yAxis: {
+                    min: 0,
+                    tickPosition: "outside",
+                    gridLineColor: "#C4D3DC",
+                    title: {
+                        text: '<br/>Mortgage<br/>Interest<br/>Paid',
+                        align: "high",
+                        rotation: 0,
+                        offset: 5,
+                        style:
+                        {
+                            color: '#888888',
+                            fontSize: '11px',
+                            lineHeight: '12px',
+                        }
+                    },
+                    labels:
+                    {
+                        y: 5,
+                        x: -5,
+                        align: "right",
+                        style: {
+                            fontSize: "9px",
+                        },
+                        formatter: function()
+                        {
+                            var res = "";
+                            var v = this.value < 0;
+                            var i = Math.abs(this.value);
+                            if (i >= 1000000)
+                            {
+                                res = "$" + i/1000000 + "m";
+                            }
+                            else if (i >= 1000)
+                            {
+                                res = "$" + i/1000 + "k";
+                            }
+                            else if (i > 100)
+                            {
+                                res = "$" + i;
+                            }
+                            else
+                            {
+                                return "$0";
+                            }
+
+                            if (v)
+                            {
+                                return "-"+res;
+                            }
+                            return res;
+                        },
+                    }
+                },
+                tooltip: {
+                    style:
+                    {
+                        zIndex: 800,
+                    },
+                    backgroundColor: "#FFFFFF",
+                    formatter: function()
+                    {
+                        drawYearIndicator(this.x);
+                        var s = '<b>Year Savings '+ this.x + "</b><br>";
+                        return s;
+                    }
+                },
+                series: [
+                    {
+                        name: 'Points B',
+                        data: pointsB,
+                        type: 'spline',
+                        id: 'pointsb'
+                    },
+                    {
+                        name: 'Points A',
+                        data: pointsA,
+                        type: 'spline',
+                        id: 'pointsa'
+                    }
+                ]
+            });
+        }
+
+        var mxFlagTimeout;
+        var mxF1, mxF2;
+
+        function mxAddFlags(numberPoints)
+        {
+            if (mxF1 != null)
+            {
+                mxF1.remove(false);
+                mxF1 = null;
+            }
+
+            if (mxF2 != null)
+            {
+                mxF2.remove(false);
+                mxF2 = null;
+            }
+
+            if (mxFlagTimeout != null)
+            {
+                clearTimeout(mxFlagTimeout);
+            }
+
+            mxDrawFlags(numberPoints);
+        }
+
+        function mxDrawFlags(numberPoints)
+        {
+            mxFlagTimeout = null;
+
+            mxF1 = mxChart.addSeries(
+                    {
+                        type : 'flags',
+                        data : [{
+                            x: 12,
+                            title : 'No Points',
+                        }],
+                        stickyTracking: false,
+                        enableMouseTracking: false,
+                        lineWidth: 2,
+                        style:{
+                            padding: "0px",
+                            margin: "0px",
+                            color: "#000000",
+                            fontFamily: "georgia, times, sans-serif",
+                            fontStyle: "italic",
+                            opacity: "0.75",
+                        },
+                        shadow: false,
+                        color : '#CB7C21',
+                        fillColor : '#CB7C21',
+                        onSeries : 'pointsa',
+                        shape : 'squarepin',
+                        width : 120,
+                        shadow: true,
+                        zIndex: 10,
+                        y: -40,
+                    });
+
+            var pointsString = numberPoints + " Points";
+            if(numberPoints == 1)
+            {
+                pointsString = numberPoints + " Point";
+            }
+
+            mxF2 = mxChart.addSeries(
+                    {
+                        type : 'flags',
+                        data : [{
+                            x: 24,
+                            title : pointsString,
+                        }],
+                        stickyTracking: false,
+                        enableMouseTracking: false,
+                        lineWidth: 2,
+                        style:{
+                            padding: "0px",
+                            margin: "0px",
+                            color: "#000000",
+                            fontFamily: "georgia, times, sans-serif",
+                            fontStyle: "italic",
+                            opacity: "0.75",
+                        },
+                        shadow: false,
+                        color : '#6CAA44',
+                        fillColor : '#6CAA44',
+                        onSeries : 'pointsb',
+                        shape : 'squarepin',
+                        width : 90,
+                        shadow: true,
+                        zIndex: 10,
+                        y: -40,
+                    });
+        }
+
+        function drawMarkers(x)
+        {
+            var point = mxChart.series[0].data[x];
+            var w = 80, h = 17;
+            var topt = mxChart.plotTop+20;
+
+            // draw line
+            var line = mxChart.renderer.rect(point.plotX+mxChart.plotLeft, mxChart.plotTop, 1, mxChart.plotHeight)
+                    .attr({
+                        fill: "#999",
+                        zIndex: 5,
+                    }).add();
+
+            // draw a marker for the line
+            var midpt = mxChart.plotLeft+point.plotX+5;
+
+            var b = mxChart.renderer.rect(midpt, topt+2, w, h)
+                    .attr({
+                        fill: '#666666',
+                        zIndex: 1000
+                    })
+                    .add();
+            var bt = mxChart.renderer.text("Points Breakeven", midpt+4, topt+h-4)
+                    .attr({
+                        zIndex: 1001
+                    })
+                    .css({
+                        fontFamily: "'arial narrow', arial, sans-serif",
+                        color: '#FFFFFF',
+                        fontSize: '11px'
+                    })
+                    .add();
+
+            var bl = mxChart.renderer.rect(midpt-5, topt+1+(h/2), 10, 1)
+                    .attr({
+                        fill: "#666666",
+                        zIndex: 900
+                    })
+                    .add();
+
+            // add to drawn objects
+            drawnObjects.push(b);
+            drawnObjects.push(bt);
+            drawnObjects.push(bl);
+
+        }
+
+        function drawYearIndicator(x)
+        {
+            if( markerLine != null && typeof markerLine.destroy === 'function' )
+            {
+                markerLine.destroy();
+            }
+            var point = mxChart.series[0].data[x];
+            if (point == null) return;
+            // draw line
+            markerLine = mxChart.renderer.rect(point.plotX+mxChart.plotLeft, mxChart.plotTop, 2, mxChart.plotHeight)
+                    .attr({
+                        fill: "#CD8A73",
+                        zIndex: 5,
+                    }).add();
+        }
+
+        function clearDrawnObjects()
+        {
+            for(var i=0; i<drawnObjects.length; i++)
+            {
+                drawnObjects[i].destroy();
+            }
+        }
+
+        function updateChart(breakevenYear)
+        {
+            //clear all markers from the graph
+            clearDrawnObjects();
+            //draw the series
+
+            //draw the new markers
+            drawMarkers(breakevenYear);
+        }
+
+    </script>
+</body>
+</html>
