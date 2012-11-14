@@ -26,6 +26,7 @@
         var mxChart = new Object();
         var drawnObjects = [];
         var markerLine = new Object();
+        var crossOverYear = null;
 
         function mxCreateChart()
         {
@@ -249,8 +250,8 @@
                             opacity: "0.75",
                         },
                         shadow: false,
-                        color : '#CB7C21',
-                        fillColor : '#CB7C21',
+                        color : '#6CAA44',
+                        fillColor : '#6CAA44',
                         onSeries : 'pointsa',
                         shape : 'squarepin',
                         width : 120,
@@ -284,8 +285,8 @@
                             opacity: "0.75",
                         },
                         shadow: false,
-                        color : '#6CAA44',
-                        fillColor : '#6CAA44',
+                        color : '#CB7C21',
+                        fillColor : '#CB7C21',
                         onSeries : 'pointsb',
                         shape : 'squarepin',
                         width : 90,
@@ -366,14 +367,84 @@
             }
         }
 
-        function updateChart(breakevenYear)
+        function createData(mortgageValue, rate, time, prepay)
+        {
+            var r = rate / 100 / 12;
+            var t = time * 12;
+            var P = (r / (1 - Math.pow((1+r), -t))) * mortgageValue;
+
+
+            var pp = 0;
+            var ip = 0;
+            var remain = mortgageValue;
+
+            // interest values to return
+            var data = [];
+            // push 0 interest for the first year because we are plotting 31 years
+            data.push(0);
+
+            for (var i=0; i < time; i++)
+            {
+                for (var m = 0; m < 12; m++)
+                {
+                    var n = i*12 + m + 1;
+
+                    if (n <= t && pp < mortgageValue)
+                    {
+                        var tpp = P*Math.pow((1+r), n-1) - mortgageValue*r*Math.pow((1+r), n-1);
+
+                        //console.log("PAY: "+tpp + " V: " +(P+prepay));
+
+                        pp += prepay + tpp;
+
+                        if (pp > mortgageValue)
+                        {
+                            pp = mortgageValue;
+                        }
+                        ip += P - tpp;
+                    }
+                }
+                data.push(ip);
+            }
+            return data;
+        }
+
+        // use to update the chart values
+        function updateChartValues()
+        {
+            var plotAData = createData(220000, 3.50, 30, 0);
+            var plotBData = createData(220000, 3.50, 30, 2500);
+
+            crossOverYear = null;
+
+            for(var i = 0; i < plotAData.length; i++)
+            {
+                mxChart.series[1].data[i].update(plotAData[i], false, false);
+                mxChart.series[0].data[i].update(plotBData[i], false, false);
+
+                if(plotAData[i] != plotBData[i] && crossOverYear == null)
+                {
+                    crossOverYear = i - 1;
+                }
+            }
+            mxChart.redraw();
+        }
+
+
+        // use to update the chart
+        function updateChart()
         {
             //clear all markers from the graph
             clearDrawnObjects();
             //draw the series
-
-            //draw the new markers
-            drawMarkers(breakevenYear);
+            updateChartValues();
+            // add the flags again
+            mxAddFlags(1);
+            if(crossOverYear != null)
+            {
+                //draw the new markers
+                drawMarkers(crossOverYear);
+            }
         }
 
     </script>
