@@ -104,25 +104,25 @@
             container.onmousemove = null;
         };
 
-        if (container.attachEvent) //if IE (and Opera depending on user setting)
-            container.attachEvent("on" + mousewheelevt, handleScroll);
-        else if (container.addEventListener) //WC3 browsers
-            container.addEventListener(mousewheelevt, handleScroll, false);
+//        if (container.attachEvent) //if IE (and Opera depending on user setting)
+//            container.attachEvent("on" + mousewheelevt, handleScroll);
+//        else if (container.addEventListener) //WC3 browsers
+//            container.addEventListener(mousewheelevt, handleScroll, false);
 
-        function handleScroll(e) {
-            if (!me.enabled) return false;
-            var evt = window.event || e,
-                delta = evt.detail ? evt.detail : evt.wheelDelta * -1,
-                zoomCenter = getRelativePosition(evt, container);
-
-            if (delta > 0) delta = -1;
-            else if (delta < 0) delta = 1;
-            
-            applyZoom(delta, zoomCenter);
-            if (evt.preventDefault) evt.preventDefault();
-            else evt.returnValue = false;
-            return false;
-        }
+//        function handleScroll(e) {
+//            if (!me.enabled) return false;
+//            var evt = window.event || e,
+//                delta = evt.detail ? evt.detail : evt.wheelDelta * -1,
+//                zoomCenter = getRelativePosition(evt, container);
+//
+//            if (delta > 0) delta = -1;
+//            else if (delta < 0) delta = 1;
+//
+//            applyZoom(delta, zoomCenter);
+//            if (evt.preventDefault) evt.preventDefault();
+//            else evt.returnValue = false;
+//            return false;
+//        }
 
         function applyZoom(val, centerPoint) {
             if (!me.enabled) return false;
