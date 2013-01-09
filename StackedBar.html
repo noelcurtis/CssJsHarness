@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mortgages</title>
+    <link rel="stylesheet" href="" type="text/css" media="all">
+    <script src="framework/jquery-1.8.2.min.js" type="text/javascript"></script>
+    <script src="framework/raphael-min.js" type="text/javascript"></script>
+    <script src="framework/scale.raphael.js" type="text/javascript"></script>
+    <script src="framework/raphael-zpd.js" type="text/javascript"></script>
+    <script src="framework/raphael.pan-zoom.js" type="text/javascript"></script>
+    <script src="framework/Highstock-1.2.4/js/highstock.src.js" type="text/javascript"></script>
+
+    <link rel="stylesheet" href="framework/bootstrap/css/bootstrap.css" type="text/css" media="all">
+
+</head>
+<body>
+
+<div id="chart" style="width: 340px; height: 340px; margin-left: 20px"></div>
+
+</body>
+</html>
+
+<script>
+
+    var chart;
+
+    $(function(){
+        createBarGraph();
+    });
+
+    function createBarGraph()
+    {
+        var chartOptions = {
+            chart: {
+                renderTo: 'chart',
+                type: 'column',
+                inverted: false,
+                marginLeft: 42,
+                marginRight: 42,
+                marginTop: 0,
+                marginBottom: 0,
+                spacingTop: 0,
+                spacingBottom:0,
+                spacingLeft:0,
+                spacingRight:0,
+                animation: false
+            },
+            title: {
+                text: null
+            },
+            credits: {
+                enabled: false
+            },
+            xAxis: {
+                categories: ['Mortgage 1', 'Mortgage 2'],
+                tickColor: null,
+                title: null,
+                lineColor: null,
+                labels: {
+                    enabled: false
+                }
+            },
+            yAxis: {
+                min: 0,
+                gridLineColor: "#ffffff",
+                tickColor: "#ffffff",
+                title: "",
+                labels: {
+                    enabled: false
+                }
+            },
+            legend: {
+                enabled: false
+            },
+            plotOptions: {
+                column: {
+                    groupPadding: 0.15,
+                    shadow: false,
+                    borderWidth: 5,
+                    stacking: 'normal'
+                }
+            },
+            series: [{
+                name: 'Insurance',
+                data: [
+                    {
+                        color: '#D3E6C7',
+                        y: 4,
+                        dataLabels: {
+                            verticalAlign: 'bottom',
+                            enabled: true,
+                            crop: false,
+                            align: "right",
+                            x: -25,
+                            style: {
+                                textAnchor: "end"
+                            },
+                            formatter: function()
+                            {
+                                if (this.y > 0)
+                                {
+                                    var tl = "Insurance" + "<br>" + this.y;
+                                    return tl;
+                                }
+                            }
+                        }
+                    },
+                    {
+                        color: '#D0D0D0',
+                        y: 3,
+                        dataLabels: {
+                            verticalAlign: 'bottom',
+                            enabled: true,
+                            crop: false,
+                            align: "left",
+                            x: 77,
+                            formatter: function()
+                            {
+                                if (this.y > 0)
+                                {
+                                    var tl = "Insurance" + "<br>" + this.y;
+                                    return tl;
+                                }
+                            }
+                        }
+                    }
+                ]
+            }, {
+                name: 'Real Estate Tax',
+                data: [
+                    {
+                        color: '#A7CC8F',
+                        y: 2,
+                        dataLabels: {
+                            verticalAlign: 'bottom',
+                            enabled: true,
+                            crop: false,
+                            align: "right",
+                            x: -20,
+                            style: {
+                                textAnchor: "end"
+                            },
+                            formatter: function()
+                            {
+                                if (this.y > 0)
+                                {
+                                    var tl = "Real Estate<br/>Tax<br/>"+ this.y;
+                                    return tl;
+                                }
+                            }
+                        }
+                    },
+                    {
+                        color: '#A0A0A0',
+                        y: 2,
+                        dataLabels: {
+                            verticalAlign: 'bottom',
+                            enabled: true,
+                            crop: false,
+                            align: "left",
+                            x: 77,
+                            formatter: function()
+                            {
+                                if (this.y > 0)
+                                {
+                                    var tl = "Real Estate<br>Tax" + "<br>" + this.y;
+                                    return tl;
+                                }
+                            }
+                        }
+                    }
+                ]
+            }, {
+                name: 'Mortgage',
+                data: [
+                    {
+                        color: '#67A953',
+                        y: 1,
+                        dataLabels: {
+                            verticalAlign: 'bottom',
+                            enabled: true,
+                            crop: false,
+                            align: "right",
+                            x: -25,
+                            style: {
+                                textAnchor: "end"
+                            },
+                            formatter: function()
+                            {
+                                if (this.y > 0)
+                                {
+                                    var tl = "Mortgage<br/>"+ this.y;
+                                    return tl;
+                                }
+                            }
+                        }
+                    },
+                    {
+                        color: '#777777',
+                        y: 3,
+                        dataLabels: {
+                            verticalAlign: 'bottom',
+                            enabled: true,
+                            crop: false,
+                            align:"left",
+                            x: 77,
+                            formatter: function()
+                            {
+                                if (this.y > 0)
+                                {
+                                    var tl = "Mortgage" + "<br>" + this.y;
+                                    return tl;
+                                }
+                            }
+                        }
+                    }
+                ]
+            }]
+        };
+
+        chart = new Highcharts.Chart(chartOptions);
+    }
+
+</script>
