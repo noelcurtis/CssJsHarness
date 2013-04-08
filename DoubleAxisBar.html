@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mortgages</title>
+    <link rel="stylesheet" href="" type="text/css" media="all">
+    <script src="framework/jquery-1.8.2.min.js" type="text/javascript"></script>
+    <script src="framework/raphael-min.js" type="text/javascript"></script>
+    <script src="framework/scale.raphael.js" type="text/javascript"></script>
+    <script src="framework/raphael-zpd.js" type="text/javascript"></script>
+    <script src="framework/raphael.pan-zoom.js" type="text/javascript"></script>
+    <script src="framework/Highstock-1.2.4/js/highstock.src.js" type="text/javascript"></script>
+
+    <link rel="stylesheet" href="framework/bootstrap/css/bootstrap.css" type="text/css" media="all">
+
+</head>
+<body>
+
+<div id="chart" style="width: 330px; height: 230px; margin-left: 20px"></div>
+
+</body>
+</html>
+
+<script>
+
+var chart;
+
+$(function(){
+    createBarGraph();
+});
+
+function createBarGraph()
+{
+
+    var categories = ['2009', '2010', '2011'];
+    var population = [7.0, 6.9, 9.5];
+    var income = [49.9, 71.5, 106.4];
+
+    var chartOptions = {
+        chart: {
+            renderTo: 'chart',
+            zoomType: 'xy'
+        },
+        title: {
+            text: null
+        },
+        credits: {
+            enabled: false
+        },
+        xAxis: [{
+            categories: categories,
+            gridLineColor: "#C3E4EC",
+            gridLineWidth: 0,
+            minorGridLineColor: '#C3E4EC',
+            minorGridLineWidth: 1,
+            minorTickInterval: 1,
+            tickInterval: 1
+        }],
+        yAxis: [{ // Primary yAxis
+            labels: {
+                format: '${value}',
+                style: {
+                    color: '#67A953'
+                }
+            },
+            title: {
+                text: 'Population',
+                style: {
+                    color: '#67A953'
+                }
+            },
+            tickPosition: "outside",
+            gridLineColor: "#C3E4EC",
+            lineColor:"#C3E4EC",
+            lineWidth: 1
+        }, { // Secondary yAxis
+            title: {
+                text: 'Income',
+                style: {
+                    color: '#A0A0A0'
+                }
+            },
+            labels: {
+                format: '${value}',
+                style: {
+                    color: '#A0A0A0'
+                }
+            },
+            opposite: true,
+            tickPosition: "outside",
+            gridLineColor: "#C3E4EC",
+            lineColor:"#C3E4EC",
+            lineWidth: 1
+        }],
+        plotOptions: {
+            column: {
+                shadow: false,
+                borderWidth: 0,
+            }
+        },
+        tooltip: {
+            shared: true
+        },
+        legend: {
+            enabled: false
+        },
+        series: [{
+            name: 'Population',
+            yAxis: 0,
+            color: '#67A953',
+            type: 'column',
+            data: population,
+            tooltip: {
+                enabled: false
+            }
+        },{
+            name: 'Income',
+            color: '#A0A0A0',
+            type: 'column',
+            yAxis: 1,
+            data: income,
+            tooltip: {
+                enabled: false
+            }
+
+        }]
+    };
+
+    chart = new Highcharts.Chart(chartOptions);
+}
+
+</script>
